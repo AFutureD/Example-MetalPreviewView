@@ -3,10 +3,12 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 56;
+	objectVersion = 70;
 	objects = {
 
 /* Begin PBXBuildFile section */
+		191740BA2E30EE3400CE35E0 /* sdfs Watch App.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = 191740B92E30EE3400CE35E0 /* sdfs Watch App.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		1950D40C2E30AB1000B6B787 /* GaussianBlur.metal in Sources */ = {isa = PBXBuildFile; fileRef = 1950D40B2E30AB1000B6B787 /* GaussianBlur.metal */; };
 		D241E7602B22FF6100F5E27C /* TemplateApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D241E75F2B22FF6100F5E27C /* TemplateApp.swift */; };
 		D241E7642B22FF6200F5E27C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D241E7632B22FF6200F5E27C /* Assets.xcassets */; };
 		D241E7682B22FF6200F5E27C /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D241E7672B22FF6200F5E27C /* Preview Assets.xcassets */; };
@@ -14,7 +16,34 @@
 		D241E76F2B22FFB500F5E27C /* macOS in Frameworks */ = {isa = PBXBuildFile; platformFilters = (macos, ); productRef = D241E76E2B22FFB500F5E27C /* macOS */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		191740BB2E30EE3400CE35E0 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 1BA13A882B2214D30021880F /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 191740B82E30EE3400CE35E0;
+			remoteInfo = "sdfs Watch App";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		191740C62E30EE3500CE35E0 /* Embed Watch Content */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "$(CONTENTS_FOLDER_PATH)/Watch";
+			dstSubfolderSpec = 16;
+			files = (
+				191740BA2E30EE3400CE35E0 /* sdfs Watch App.app in Embed Watch Content */,
+			);
+			name = "Embed Watch Content";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
+		191740B42E30EE3400CE35E0 /* sdfs.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = sdfs.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		191740B92E30EE3400CE35E0 /* sdfs Watch App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "sdfs Watch App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		1950D40B2E30AB1000B6B787 /* GaussianBlur.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = GaussianBlur.metal; sourceTree = "<group>"; };
 		1B27F1132B22206C00F33B1F /* Third */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Third; sourceTree = "<group>"; };
 		1BA13ABF2B221D390021880F /* macOS */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = macOS; sourceTree = "<group>"; };
 		1BA13AC12B221D390021880F /* iOS */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = iOS; sourceTree = "<group>"; };
@@ -29,7 +58,18 @@
 		D241E7672B22FF6200F5E27C /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		191740BD2E30EE3400CE35E0 /* sdfs Watch App */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = "sdfs Watch App"; sourceTree = "<group>"; };
+/* End PBXFileSystemSynchronizedRootGroup section */
+
 /* Begin PBXFrameworksBuildPhase section */
+		191740B62E30EE3400CE35E0 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		D241E75A2B22FF6100F5E27C /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -47,6 +87,7 @@
 			children = (
 				1BA13ABE2B221D390021880F /* Packages */,
 				D241E75E2B22FF6100F5E27C /* Template */,
+				191740BD2E30EE3400CE35E0 /* sdfs Watch App */,
 				1BA13A912B2214D30021880F /* Products */,
 				1BA13AB42B221CBC0021880F /* Frameworks */,
 			);
@@ -56,6 +97,8 @@
 			isa = PBXGroup;
 			children = (
 				D241E75D2B22FF6100F5E27C /* Template.app */,
+				191740B42E30EE3400CE35E0 /* sdfs.app */,
+				191740B92E30EE3400CE35E0 /* sdfs Watch App.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -84,6 +127,7 @@
 		D241E75E2B22FF6100F5E27C /* Template */ = {
 			isa = PBXGroup;
 			children = (
+				1950D40B2E30AB1000B6B787 /* GaussianBlur.metal */,
 				D241E75F2B22FF6100F5E27C /* TemplateApp.swift */,
 				D241E7632B22FF6200F5E27C /* Assets.xcassets */,
 				D241E7652B22FF6200F5E27C /* Template.entitlements */,
@@ -103,6 +147,47 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		191740B32E30EE3400CE35E0 /* sdfs */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 191740CA2E30EE3500CE35E0 /* Build configuration list for PBXNativeTarget "sdfs" */;
+			buildPhases = (
+				191740B22E30EE3400CE35E0 /* Resources */,
+				191740C62E30EE3500CE35E0 /* Embed Watch Content */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				191740BC2E30EE3400CE35E0 /* PBXTargetDependency */,
+			);
+			name = sdfs;
+			packageProductDependencies = (
+			);
+			productName = sdfs;
+			productReference = 191740B42E30EE3400CE35E0 /* sdfs.app */;
+			productType = "com.apple.product-type.application.watchapp2-container";
+		};
+		191740B82E30EE3400CE35E0 /* sdfs Watch App */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 191740C92E30EE3500CE35E0 /* Build configuration list for PBXNativeTarget "sdfs Watch App" */;
+			buildPhases = (
+				191740B52E30EE3400CE35E0 /* Sources */,
+				191740B62E30EE3400CE35E0 /* Frameworks */,
+				191740B72E30EE3400CE35E0 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				191740BD2E30EE3400CE35E0 /* sdfs Watch App */,
+			);
+			name = "sdfs Watch App";
+			packageProductDependencies = (
+			);
+			productName = "sdfs Watch App";
+			productReference = 191740B92E30EE3400CE35E0 /* sdfs Watch App.app */;
+			productType = "com.apple.product-type.application";
+		};
 		D241E75C2B22FF6100F5E27C /* Template */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = D241E76B2B22FF6200F5E27C /* Build configuration list for PBXNativeTarget "Template" */;
@@ -131,9 +216,15 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
-				LastSwiftUpdateCheck = 1500;
+				LastSwiftUpdateCheck = 1630;
 				LastUpgradeCheck = 1500;
 				TargetAttributes = {
+					191740B32E30EE3400CE35E0 = {
+						CreatedOnToolsVersion = 16.3;
+					};
+					191740B82E30EE3400CE35E0 = {
+						CreatedOnToolsVersion = 16.3;
+					};
 					D241E75C2B22FF6100F5E27C = {
 						CreatedOnToolsVersion = 15.0.1;
 					};
@@ -155,11 +246,27 @@
 			projectRoot = "";
 			targets = (
 				D241E75C2B22FF6100F5E27C /* Template */,
+				191740B32E30EE3400CE35E0 /* sdfs */,
+				191740B82E30EE3400CE35E0 /* sdfs Watch App */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		191740B22E30EE3400CE35E0 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		191740B72E30EE3400CE35E0 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		D241E75B2B22FF6100F5E27C /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -172,17 +279,123 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		191740B52E30EE3400CE35E0 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		D241E7592B22FF6100F5E27C /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 				D241E7602B22FF6100F5E27C /* TemplateApp.swift in Sources */,
+				1950D40C2E30AB1000B6B787 /* GaussianBlur.metal in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		191740BC2E30EE3400CE35E0 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 191740B82E30EE3400CE35E0 /* sdfs Watch App */;
+			targetProxy = 191740BB2E30EE3400CE35E0 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin XCBuildConfiguration section */
+		191740C42E30EE3500CE35E0 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = AU9N94TW42;
+				INFOPLIST_KEY_CFBundleDisplayName = sdfs;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.simplehealth.sdfs;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		191740C52E30EE3500CE35E0 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = AU9N94TW42;
+				INFOPLIST_KEY_CFBundleDisplayName = sdfs;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.simplehealth.sdfs;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.0;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		191740C72E30EE3500CE35E0 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = AU9N94TW42;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = sdfs;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_WKWatchOnly = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.simplehealth.sdfs.watchkitapp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 11.4;
+			};
+			name = Debug;
+		};
+		191740C82E30EE3500CE35E0 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = AU9N94TW42;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = sdfs;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_WKWatchOnly = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.simplehealth.sdfs.watchkitapp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				VALIDATE_PRODUCT = YES;
+				WATCHOS_DEPLOYMENT_TARGET = 11.4;
+			};
+			name = Release;
+		};
 		1BA13A9D2B2214D40021880F /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -382,6 +595,24 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		191740C92E30EE3500CE35E0 /* Build configuration list for PBXNativeTarget "sdfs Watch App" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				191740C72E30EE3500CE35E0 /* Debug */,
+				191740C82E30EE3500CE35E0 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		191740CA2E30EE3500CE35E0 /* Build configuration list for PBXNativeTarget "sdfs" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				191740C42E30EE3500CE35E0 /* Debug */,
+				191740C52E30EE3500CE35E0 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		1BA13A8B2B2214D30021880F /* Build configuration list for PBXProject "Template" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
