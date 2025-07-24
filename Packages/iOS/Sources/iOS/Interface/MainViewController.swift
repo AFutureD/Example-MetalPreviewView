@@ -10,6 +10,7 @@ import AVFoundation
 import MetalKit
 import MetalPerformanceShaders
 import Combine
+import mach
 
 extension CGAffineTransform {
     func convertToSIMD() -> simd_float3x3 {
@@ -39,10 +40,6 @@ public class RootViewController: UIViewController, AVCaptureVideoDataOutputSampl
 
     var render: Render!
 
-//    lazy var avPreview: AVCaptureVideoPreviewLayer = {
-//        AVCaptureVideoPreviewLayer()
-//    }()
-
     var deviceActiveFormatObs: AnyCancellable?
     public let session = AVCaptureSession()
 
@@ -69,36 +66,36 @@ public class RootViewController: UIViewController, AVCaptureVideoDataOutputSampl
         session.beginConfiguration()
         session.sessionPreset = .high
 
-            let deviceSession = AVCaptureDevice.DiscoverySession(deviceTypes: [.builtInWideAngleCamera], mediaType: .video, position: .back)
-            let device = deviceSession.devices.first!
+        let deviceSession = AVCaptureDevice.DiscoverySession(deviceTypes: [.builtInWideAngleCamera], mediaType: .video, position: .back)
+        let device = deviceSession.devices.first!
 
-            deviceActiveFormatObs = device.publisher(for: \.activeFormat).sink { format in
-                let captureBufferSize = format.formatDescription.dimensions.convertToSize()
-                self.render.sampleBufferSize = captureBufferSize
-            }
+        deviceActiveFormatObs = device.publisher(for: \.activeFormat).sink { format in
+            let captureBufferSize = format.formatDescription.dimensions.convertToSize()
+            self.render.sampleBufferSize = captureBufferSize
+        }
 
-            let input = try! AVCaptureDeviceInput(device: device)
-            session.addInput(input)
+        let input = try! AVCaptureDeviceInput(device: device)
+        session.addInput(input)
 
-            let output = AVCaptureVideoDataOutput()
-            output.alwaysDiscardsLateVideoFrames = true
-            output.setSampleBufferDelegate(self, queue: dataOutputQueue)
+        let output = AVCaptureVideoDataOutput()
+        output.alwaysDiscardsLateVideoFrames = true
+        output.setSampleBufferDelegate(self, queue: dataOutputQueue)
 
-            output.videoSettings = [
-                kCVPixelBufferMetalCompatibilityKey as String: true,
-                kCVPixelBufferPixelFormatTypeKey as String: NSNumber(value: Int32(kCVPixelFormatType_32BGRA))
-            ]
-            session.addOutput(output)
+        output.videoSettings = [
+            kCVPixelBufferMetalCompatibilityKey as String: true,
+            kCVPixelBufferPixelFormatTypeKey as String: NSNumber(value: Int32(kCVPixelFormatType_32BGRA))
+        ]
+        session.addOutput(output)
 
-            let conn = output.connection(with: .video)
-            conn?.isEnabled = true
-            if #available(iOS 17.0, *) {
-                let coord = AVCaptureDevice.RotationCoordinator(device: device, previewLayer: nil)
-                let angle = coord.videoRotationAngleForHorizonLevelCapture
-                conn?.videoRotationAngle = angle
-            } else {
-                conn?.videoOrientation = .portrait
-            }
+        let conn = output.connection(with: .video)
+        conn?.isEnabled = true
+        if #available(iOS 17.0, *) {
+            let coord = AVCaptureDevice.RotationCoordinator(device: device, previewLayer: nil)
+            let angle = coord.videoRotationAngleForHorizonLevelCapture
+            conn?.videoRotationAngle = angle
+        } else {
+            conn?.videoOrientation = .portrait
+        }
 
         session.commitConfiguration()
 
@@ -106,6 +103,13 @@ public class RootViewController: UIViewController, AVCaptureVideoDataOutputSampl
             await self.session.startRunning()
         }
 
+    }
+
+    public override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        let b = preview.bounds
+        render.maskCornerRadiusInViewBounds = 32.0
+        render.maskRectInViewBounds = CGRect(x: b.width / 2 - 150, y: b.height / 2 - 150, width: 200, height: 200)
     }
 
     public func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
@@ -133,9 +137,36 @@ class Render: NSObject, MTKViewDelegate {
 
     var sampleBufferTextureCache: CVMetalTextureCache?
     var sampleBuffer: CMSampleBuffer?
-    
+
+    /// only alpha channel. range 0 - 1.
+    /// 0: the sample buffer color
+    /// 1: the other color
+    var maskTexture: (any MTLTexture)?
+
+    // rect in view bound coordinate.
+    // maskRectInViewBounds -> drawable size -> maskTexture.
+    var maskRectInViewBounds: CGRect? {
+        didSet {
+            updateMask()
+        }
+    }
+
+    // this value will clamp between 0 - maskRectInViewBounds / 2
+    var maskCornerRadiusInViewBounds: CGFloat = .zero {
+        didSet {
+            updateMask()
+        }
+    }
+
+    var drawableScale: CGFloat = .zero
+
     var drawableSize: CGSize = .zero {
-        didSet { if oldValue != drawableSize { updateTransform() }}
+        didSet {
+            if oldValue != drawableSize {
+                updateTransform()
+                updateMask()
+            }
+        }
     }
 
     var sampleBufferAngle: CGFloat = 0 {
@@ -154,19 +185,20 @@ class Render: NSObject, MTKViewDelegate {
 
     init(view: MTKView) {
         self.device = view.device
+        self.drawableScale = view.contentScaleFactor
         self.commandQueue = view.device?.makeCommandQueue()
         super.init()
 
         CVMetalTextureCacheCreate(kCFAllocatorDefault, nil, device!, nil, &sampleBufferTextureCache)
         setupComputePipeline()
     }
-    
+
     func setupComputePipeline() {
         guard let device = device else { return }
-        
+
         let library = device.makeDefaultLibrary()
         let kernelFunction = library?.makeFunction(name: "gaussianBlur")
-        
+
         do {
             computePipelineState = try device.makeComputePipelineState(function: kernelFunction!)
         } catch {
@@ -228,6 +260,41 @@ class Render: NSObject, MTKViewDelegate {
         textureTransform = transform
     }
 
+    func updateMask() {
+        var maskTexture: (any MTLTexture)? = nil
+        defer {
+            self.maskTexture = maskTexture
+        }
+
+        guard let maskRectInViewBounds, drawableSize != .zero, let device else {
+            return
+        }
+
+        let width = Int(drawableSize.width)
+        let height = Int(drawableSize.height)
+
+        let textureDescriptor = MTLTextureDescriptor.texture2DDescriptor(
+            pixelFormat: .r8Unorm,
+            width: width,
+            height: height,
+            mipmapped: false
+        )
+
+        guard let texture = device.makeTexture(descriptor: textureDescriptor) else {
+            return
+        }
+
+        guard let buffer = Self.buildMaskBufferInGraySpace(rect: maskRectInViewBounds, cornerRadis: maskCornerRadiusInViewBounds, scale: drawableScale, size: drawableSize) else {
+            return
+        }
+
+        let region = MTLRegionMake2D(0, 0, width, height)
+        texture.replace(region: region, mipmapLevel: 0, withBytes: buffer, bytesPerRow: width)
+
+        maskTexture = texture
+    }
+
+
     func draw(in view: MTKView) {
         guard
             let sampleBuffer = sampleBuffer,
@@ -238,6 +305,9 @@ class Render: NSObject, MTKViewDelegate {
         else {
             return
         }
+
+        assert(drawableSize == view.drawableSize, "Drawable Size Has Changed. Current \(view.drawableSize), but Render still \(drawableSize).")
+        assert(view.bounds.width * self.drawableScale == self.drawableSize.width, "Bounds(\(view.bounds)), Scale(\(drawableScale)), Drawable Size(\(drawableSize)) are not match.")
 
         let pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer)!
 
@@ -257,10 +327,11 @@ class Render: NSObject, MTKViewDelegate {
         var transform = textureTransform.inverted().convertToSIMD()
 
         let computeEncoder = commandBuffer.makeComputeCommandEncoder()!
-        
+
         computeEncoder.setComputePipelineState(pipelineState)
-        computeEncoder.setTexture(inputMTLTexture, index: 0)
-        computeEncoder.setTexture(drawable.texture, index: 1)
+        computeEncoder.setTexture(drawable.texture, index: 0)
+        computeEncoder.setTexture(inputMTLTexture, index: 1)
+        computeEncoder.setTexture(maskTexture, index: 2)
         computeEncoder.setBytes(&transform, length: MemoryLayout<simd_float3x3>.stride, index: 0)
 
         // https://developer.apple.com/documentation/metal/calculating-threadgroup-and-grid-sizes#Calculate-Threads-per-Threadgroup
@@ -276,4 +347,104 @@ class Render: NSObject, MTKViewDelegate {
         commandBuffer.present(drawable)
         commandBuffer.commit()
     }
+}
+
+
+extension Render {
+    // using MTLPixelFormat.r8Unorm
+    // about 5 ms
+    static func buildMaskBufferInGraySpace(rect: CGRect, cornerRadis: CGFloat, scale: CGFloat, size: CGSize) -> [UInt8]? {
+        let start = mach_absolute_time()
+
+        let width = Int(size.width)
+        let height = Int(size.height)
+
+        var buffer = [UInt8](repeating: 0, count: width * height)
+
+        let scaledRect = rect.applying(.identity.scaledBy(x: scale, y: scale))
+        let scaledCornerRadius = cornerRadis * scale
+
+        let colorSpace = CGColorSpaceCreateDeviceGray()
+        guard let context = CGContext(
+            data: &buffer,
+            width: width,
+            height: height,
+            bitsPerComponent: 8,
+            bytesPerRow: width,
+            space: colorSpace,
+            bitmapInfo: CGImageAlphaInfo.alphaOnly.rawValue
+        ) else {
+            return nil
+        }
+
+        context.translateBy(x: 0, y: CGFloat(height))
+        context.scaleBy(x: 1, y: -1)
+
+        let path = UIBezierPath(roundedRect: scaledRect, cornerRadius: scaledCornerRadius)
+
+        context.addPath(path.cgPath)
+        context.setFillColor(gray: 1, alpha: 1) // change gray from 0 - 1
+        context.fillPath()
+
+        let end = mach_absolute_time()
+
+        print("[*]:", machTimeToSeconds(end - start))
+        return buffer
+    }
+
+    // using MTLPixelFormat.r8Unorm
+    // about 150 ms
+    // TODO: convert this function. use image as input and sample it to drawable size
+    static func buildMaskBufferInGraySpace2(rect: CGRect, cornerRadis: CGFloat, scale: CGFloat, size: CGSize) -> [UInt8]? {
+        let start = mach_absolute_time()
+        let uiImage = UIGraphicsImageRenderer(size: size).image { rendererCtx in
+            let ctx = rendererCtx.cgContext
+
+            let scaledRect = rect.applying(.identity.scaledBy(x: scale, y: scale))
+            let scaledCornerRadius = cornerRadis * scale
+
+            let path = UIBezierPath(roundedRect: scaledRect, cornerRadius: scaledCornerRadius)
+            ctx.addPath(path.cgPath)
+
+            ctx.setFillColor(gray: 1, alpha: 0.5) // change gray from 0 - 1
+            ctx.fillPath()
+        }
+        let end1 = mach_absolute_time()
+
+        print("[*]:", machTimeToSeconds(end1 - start))
+
+        let width = Int(size.width)
+        let height = Int(size.height)
+
+        var buffer = [UInt8](repeating: 0, count: width * height)
+
+        let colorSpace = CGColorSpaceCreateDeviceGray()
+        guard let context = CGContext(
+            data: &buffer,
+            width: width,
+            height: height,
+            bitsPerComponent: 8,
+            bytesPerRow: width,
+            space: colorSpace,
+            bitmapInfo: CGImageAlphaInfo.alphaOnly.rawValue
+        ) else {
+            return nil
+        }
+
+        let rect = CGRect(x: 0, y: 0, width: width, height: height)
+        context.draw(uiImage.cgImage!, in: rect)
+
+        let end2 = mach_absolute_time()
+
+        print("[*]:", machTimeToSeconds(end2 - end1))
+        return buffer
+    }
+}
+
+func machTimeToSeconds(_ machTime: UInt64) -> Double {
+    var timebaseInfo = mach_timebase_info_data_t()
+    mach_timebase_info(&timebaseInfo) // Initialize timebaseInfo
+
+    let nanos = Double(machTime) * Double(timebaseInfo.numer) / Double(timebaseInfo.denom)
+    return nanos / 1e9
 }
