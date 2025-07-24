@@ -8,6 +8,7 @@
 import UIKit
 import AVFoundation
 import MetalKit
+import MetalPerformanceShaders
 
 public class RootViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDelegate {
 
@@ -145,7 +146,7 @@ class Render: NSObject, MTKViewDelegate {
                                                   width, height, 0, &inputTexture)
 
         guard let inputMTLTexture = CVMetalTextureGetTexture(inputTexture!) else { return }
-        
+
         let commandBuffer = commandQueue.makeCommandBuffer()!
         let computeEncoder = commandBuffer.makeComputeCommandEncoder()!
         
