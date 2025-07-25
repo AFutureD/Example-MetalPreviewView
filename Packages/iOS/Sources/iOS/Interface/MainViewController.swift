@@ -189,6 +189,8 @@ class Render: NSObject, MTKViewDelegate {
         self.commandQueue = view.device?.makeCommandQueue()
         super.init()
 
+        view.preferredFramesPerSecond = 120
+
         CVMetalTextureCacheCreate(kCFAllocatorDefault, nil, device!, nil, &sampleBufferTextureCache)
         setupComputePipeline()
     }
@@ -297,10 +299,11 @@ class Render: NSObject, MTKViewDelegate {
 
     func draw(in view: MTKView) {
         guard
-            let sampleBuffer = sampleBuffer,
+            let device,
+            let sampleBuffer,
             let drawable = view.currentDrawable,
-            let commandQueue = commandQueue,
-            let sampleBufferTextureCache = sampleBufferTextureCache,
+            let commandQueue,
+            let sampleBufferTextureCache,
             let pipelineState = computePipelineState
         else {
             return
@@ -324,14 +327,28 @@ class Render: NSObject, MTKViewDelegate {
 
         let commandBuffer = commandQueue.makeCommandBuffer()!
 
+        let blurTextureDesc = MTLTextureDescriptor.texture2DDescriptor(pixelFormat: inputMTLTexture.pixelFormat,
+                                                            width: inputMTLTexture.width,
+                                                            height: inputMTLTexture.height,
+                                                            mipmapped: false)
+        blurTextureDesc.usage = [.shaderRead, .shaderWrite]
+        guard let blurTexture = device.makeTexture(descriptor: blurTextureDesc) else { return }
+
+        // 3.  Encode the blur.
+        let blurKernel = MPSImageGaussianBlur(device: device, sigma: 20.0)
+        blurKernel.edgeMode = .clamp
+        blurKernel.encode(commandBuffer: commandBuffer,
+                    sourceTexture: inputMTLTexture,
+                    destinationTexture: blurTexture)
+
         var transform = textureTransform.inverted().convertToSIMD()
 
         let computeEncoder = commandBuffer.makeComputeCommandEncoder()!
-
         computeEncoder.setComputePipelineState(pipelineState)
         computeEncoder.setTexture(drawable.texture, index: 0)
         computeEncoder.setTexture(inputMTLTexture, index: 1)
-        computeEncoder.setTexture(maskTexture, index: 2)
+        computeEncoder.setTexture(blurTexture, index: 2)
+        computeEncoder.setTexture(maskTexture, index: 3)
         computeEncoder.setBytes(&transform, length: MemoryLayout<simd_float3x3>.stride, index: 0)
 
         // https://developer.apple.com/documentation/metal/calculating-threadgroup-and-grid-sizes#Calculate-Threads-per-Threadgroup

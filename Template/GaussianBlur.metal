@@ -4,7 +4,8 @@ using namespace metal;
 
 kernel void gaussianBlur(texture2d<half, access::write> outputTexture [[texture(0)]],
                          texture2d<half, access::sample> inputTexture [[texture(1)]],
-                         texture2d<float, access::read> mask         [[texture(2)]],
+                         texture2d<half, access::sample> blurTexture [[texture(2)]],
+                         texture2d<float, access::read> mask         [[texture(3)]],
                          const device float3x3& transform             [[ buffer(0) ]],
                          uint2 gid [[thread_position_in_grid]]) {
     constexpr sampler s(coord::pixel, address::clamp_to_edge, filter::linear);
@@ -21,13 +22,15 @@ kernel void gaussianBlur(texture2d<half, access::write> outputTexture [[texture(
     if (uv.x < 0.0 || uv.x > 1.0 || uv.y < 0.0 || uv.y > 1.0) {
         color = half4(0,0,0,0);
     } else {
-        color = inputTexture.sample(s, transformedCoord);
+        // Read the single channel from the r8Unorm mask texture.
+        float maskValue = mask.read(gid).r;
+
+        half4 background = inputTexture.sample(s, transformedCoord);
+        half4 foreground = blurTexture.sample(s, transformedCoord);
+
+        // blend the color
+        color = mix(foreground, background, half(maskValue));
     }
-
-    // Read the single channel from the r8Unorm mask texture.
-    float maskValue = mask.read(gid).r;
-
-    color = mix(color, half4(0, 0, 0, 0), half(maskValue));
 
     outputTexture.write(color, gid);
 }

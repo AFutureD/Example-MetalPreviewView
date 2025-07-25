@@ -44,6 +44,7 @@
 		191740B42E30EE3400CE35E0 /* sdfs.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = sdfs.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		191740B92E30EE3400CE35E0 /* sdfs Watch App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "sdfs Watch App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		1950D40B2E30AB1000B6B787 /* GaussianBlur.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = GaussianBlur.metal; sourceTree = "<group>"; };
+		197AFF2C2E337FD8006F0FE3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		1B27F1132B22206C00F33B1F /* Third */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Third; sourceTree = "<group>"; };
 		1BA13ABF2B221D390021880F /* macOS */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = macOS; sourceTree = "<group>"; };
 		1BA13AC12B221D390021880F /* iOS */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = iOS; sourceTree = "<group>"; };
@@ -127,6 +128,7 @@
 		D241E75E2B22FF6100F5E27C /* Template */ = {
 			isa = PBXGroup;
 			children = (
+				197AFF2C2E337FD8006F0FE3 /* Info.plist */,
 				1950D40B2E30AB1000B6B787 /* GaussianBlur.metal */,
 				D241E75F2B22FF6100F5E27C /* TemplateApp.swift */,
 				D241E7632B22FF6200F5E27C /* Assets.xcassets */,
@@ -527,6 +529,7 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Template/Info.plist;
 				INFOPLIST_KEY_NSCameraUsageDescription = asdadsa;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
@@ -566,6 +569,7 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Template/Info.plist;
 				INFOPLIST_KEY_NSCameraUsageDescription = asdadsa;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
