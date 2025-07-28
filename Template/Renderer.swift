@@ -26,6 +26,9 @@ class Render: NSObject, MTKViewDelegate {
     var sampleBufferTextureCache: CVMetalTextureCache?
     var sampleBuffer: CMSampleBuffer?
 
+    // transfer the drawable's texture gid to buffer's texture coord.
+    var textureTransform: CGAffineTransform = .identity
+
     /// only alpha channel. range 0 - 1.
     /// 0: the sample buffer color
     /// 1: the other color
@@ -75,9 +78,6 @@ class Render: NSObject, MTKViewDelegate {
         didSet { if oldValue != contentMode { updateTransform() }}
     }
 
-    // transfer the drawable's texture gid to buffer's texture coord.
-    var textureTransform: CGAffineTransform = .identity
-
     init(view: MTKView) {
         self.device = view.device
         self.drawableScale = view.contentScaleFactor
@@ -118,25 +118,29 @@ class Render: NSObject, MTKViewDelegate {
         else {
             return
         }
-
+        
         assert(drawableSize == view.drawableSize, "Drawable Size Has Changed. Current \(view.drawableSize), but Render still \(drawableSize).")
         assert(view.bounds.width * self.drawableScale == self.drawableSize.width, "Bounds(\(view.bounds)), Scale(\(drawableScale)), Drawable Size(\(drawableSize)) are not match.")
 
-        let pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer)!
-
-        let width = CVPixelBufferGetWidth(pixelBuffer)
-        let height = CVPixelBufferGetHeight(pixelBuffer)
-
+        // 1. convert input sample buffer to input texture
         var inputTexture: CVMetalTexture?
+        do {
+            let imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer)!
 
-        CVMetalTextureCacheCreateTextureFromImage(kCFAllocatorDefault, sampleBufferTextureCache,
-                                                  pixelBuffer, nil, .bgra8Unorm,
-                                                  width, height, 0, &inputTexture)
+            let imageWidth = CVPixelBufferGetWidth(imageBuffer)
+            let imageHeight = CVPixelBufferGetHeight(imageBuffer)
+
+            CVMetalTextureCacheCreateTextureFromImage(kCFAllocatorDefault, sampleBufferTextureCache,
+                                                      imageBuffer, nil, .bgra8Unorm,
+                                                      imageWidth, imageHeight, 0, &inputTexture)
+        }
 
         guard let inputMTLTexture = CVMetalTextureGetTexture(inputTexture!) else { return }
 
+        // 2. create current metal render command
         let commandBuffer = commandQueue.makeCommandBuffer()!
 
+        // 3. Create Gaussian Blur Texture by using MPSImageGaussianBlur
         let blurTextureDesc = MTLTextureDescriptor.texture2DDescriptor(pixelFormat: inputMTLTexture.pixelFormat,
                                                                        width: inputMTLTexture.width,
                                                                        height: inputMTLTexture.height,
@@ -150,11 +154,13 @@ class Render: NSObject, MTKViewDelegate {
                           sourceTexture: inputMTLTexture,
                           destinationTexture: blurTexture)
 
+        // 4. create texture transform to simd format so that we can pass into metal function
         var transform = textureTransform.convertToSIMD()
 
+        // 5. setup metal function
         let computeEncoder = commandBuffer.makeComputeCommandEncoder()!
         computeEncoder.setComputePipelineState(pipelineState)
-        computeEncoder.setTexture(drawable.texture, index: 0)
+        computeEncoder.setTexture(drawable.texture, index: 0) // render texture into drawable
         computeEncoder.setTexture(inputMTLTexture, index: 1)
         computeEncoder.setTexture(blurTexture, index: 2)
         computeEncoder.setTexture(maskTexture, index: 3)
@@ -178,6 +184,7 @@ class Render: NSObject, MTKViewDelegate {
         }
         computeEncoder.endEncoding()
 
+        // 6. draw the result
         commandBuffer.present(drawable)
         commandBuffer.commit()
     }

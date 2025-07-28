@@ -56,6 +56,7 @@ public class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBuf
 
         deviceActiveFormatObs = device.publisher(for: \.activeFormat).sink { format in
             let captureBufferSize = format.formatDescription.dimensions.convertToSize()
+            // IMPORTANT: observe capture output size
             self.render.sampleBufferSize = captureBufferSize
         }
 
@@ -104,6 +105,7 @@ public class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBuf
             } else {
                 90.0
             }
+            // IMPORTANT: update sample angle
             render.sampleBufferAngle = angle ?? 0
             render.sampleBuffer = sampleBuffer
         }
