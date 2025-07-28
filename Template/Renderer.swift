@@ -11,7 +11,7 @@ import MetalPerformanceShaders
 
 
 
-
+// View <- Drawable <- SampleBuffer
 class Render: NSObject, MTKViewDelegate {
     enum ContentMode : Int, Sendable {
         case scaleAspectFit = 1
@@ -184,6 +184,12 @@ class Render: NSObject, MTKViewDelegate {
 }
 
 extension Render {
+    var sampleBufferSizeWithAngleTransfermed: CGSize {
+        let rect = CGRect(origin: .zero, size: self.sampleBufferSize)
+        let rotatedSize = rect.applying(.identity.rotated(by: self.sampleBufferAngle / 180 * .pi)).size
+        return CGSize(width: Int(round(rotatedSize.width)), height: Int(round(rotatedSize.height)))
+    }
+
 
     func updateTransform() {
         guard sampleBufferSize != .zero, drawableSize != .zero else {
@@ -191,11 +197,7 @@ extension Render {
             return
         }
 
-        let sampleBufferSize: CGSize = {
-            let rect = CGRect(origin: .zero, size: self.sampleBufferSize)
-            let rotatedSize = rect.applying(.identity.rotated(by: self.sampleBufferAngle / 180 * .pi)).size
-            return CGSize(width: Int(round(rotatedSize.width)), height: Int(round(rotatedSize.height)))
-        }()
+        let sampleBufferSize = sampleBufferSizeWithAngleTransfermed
 
         let widthScale  = sampleBufferSize.width / drawableSize.width
         let heightScale = sampleBufferSize.height / drawableSize.height
@@ -213,6 +215,32 @@ extension Render {
         textureTransform = CGAffineTransform.identity
             .scaledBy(x: scale, y: scale)
             .translatedBy(x: deltaX, y: deltaY)
+    }
+
+    /// Convert the point from the view's coordinate to the sample buffer's normalized coordinate.
+    ///
+    /// This function will take drawableScale, drawableSize, sample angle, sample size into consideration.
+    func sampleBufferPointConvert(fromViewPoint point: CGPoint) -> CGPoint {
+        let transformed = point
+            .applying(.identity.scaledBy(x: drawableScale,
+                                         y: drawableScale))
+            .applying(textureTransform)
+
+        return .init(x: transformed.x / sampleBufferSizeWithAngleTransfermed.width,
+                     y: transformed.y / sampleBufferSizeWithAngleTransfermed.height)
+    }
+
+    /// Convert the point from sample buffer's normalized coordinate to the view's coordinate.
+    ///
+    /// This function will take drawableScale, drawableSize, sample angle, sample size into consideration.
+    func viewPointConvert(fromSampleBufferPoint point: CGPoint) -> CGPoint {
+        let pixelPoint: CGPoint = .init(x: point.x * sampleBufferSizeWithAngleTransfermed.width,
+                                        y: point.y * sampleBufferSizeWithAngleTransfermed.height)
+
+        return pixelPoint
+            .applying(textureTransform.inverted())
+            .applying(.identity.scaledBy(x: 1 / drawableScale,
+                                         y: 1 / drawableScale))
     }
 }
 
