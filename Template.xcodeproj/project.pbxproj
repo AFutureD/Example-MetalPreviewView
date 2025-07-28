@@ -3,17 +3,19 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 70;
+	objectVersion = 56;
 	objects = {
 
 /* Begin PBXBuildFile section */
 		191740BA2E30EE3400CE35E0 /* sdfs Watch App.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = 191740B92E30EE3400CE35E0 /* sdfs Watch App.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		194DD6952E33910E00D2AE2C /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 194DD6942E33910E00D2AE2C /* SceneDelegate.swift */; };
+		194DD6962E33910E00D2AE2C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 194DD6922E33910E00D2AE2C /* AppDelegate.swift */; };
+		194DD6972E33910E00D2AE2C /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 194DD6912E33910E00D2AE2C /* ViewController.swift */; };
 		1950D40C2E30AB1000B6B787 /* GaussianBlur.metal in Sources */ = {isa = PBXBuildFile; fileRef = 1950D40B2E30AB1000B6B787 /* GaussianBlur.metal */; };
-		D241E7602B22FF6100F5E27C /* TemplateApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D241E75F2B22FF6100F5E27C /* TemplateApp.swift */; };
+		19970FCF2E3710C40034F572 /* Renderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19970FCE2E3710BF0034F572 /* Renderer.swift */; };
+		19970FD12E37114F0034F572 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19970FD02E37114C0034F572 /* Extensions.swift */; };
 		D241E7642B22FF6200F5E27C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D241E7632B22FF6200F5E27C /* Assets.xcassets */; };
 		D241E7682B22FF6200F5E27C /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D241E7672B22FF6200F5E27C /* Preview Assets.xcassets */; };
-		D241E76D2B22FFB500F5E27C /* iOS in Frameworks */ = {isa = PBXBuildFile; platformFilter = ios; productRef = D241E76C2B22FFB500F5E27C /* iOS */; };
-		D241E76F2B22FFB500F5E27C /* macOS in Frameworks */ = {isa = PBXBuildFile; platformFilters = (macos, ); productRef = D241E76E2B22FFB500F5E27C /* macOS */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -43,25 +45,18 @@
 /* Begin PBXFileReference section */
 		191740B42E30EE3400CE35E0 /* sdfs.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = sdfs.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		191740B92E30EE3400CE35E0 /* sdfs Watch App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "sdfs Watch App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		194DD6912E33910E00D2AE2C /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		194DD6922E33910E00D2AE2C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		194DD6942E33910E00D2AE2C /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		1950D40B2E30AB1000B6B787 /* GaussianBlur.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = GaussianBlur.metal; sourceTree = "<group>"; };
-		197AFF2C2E337FD8006F0FE3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
-		1B27F1132B22206C00F33B1F /* Third */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Third; sourceTree = "<group>"; };
-		1BA13ABF2B221D390021880F /* macOS */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = macOS; sourceTree = "<group>"; };
-		1BA13AC12B221D390021880F /* iOS */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = iOS; sourceTree = "<group>"; };
-		D241E7532B22EDE100F5E27C /* Domain */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Domain; sourceTree = "<group>"; };
-		D241E7542B22EDE100F5E27C /* Common */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Common; sourceTree = "<group>"; };
-		D241E7552B22EDE100F5E27C /* BaseKit */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = BaseKit; sourceTree = "<group>"; };
-		D241E7562B22EDE100F5E27C /* CommonUI */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = CommonUI; sourceTree = "<group>"; };
+		197AFF2C2E337FD8006F0FE3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		19970FCE2E3710BF0034F572 /* Renderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Renderer.swift; sourceTree = "<group>"; };
+		19970FD02E37114C0034F572 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		D241E75D2B22FF6100F5E27C /* Template.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Template.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		D241E75F2B22FF6100F5E27C /* TemplateApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemplateApp.swift; sourceTree = "<group>"; };
 		D241E7632B22FF6200F5E27C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		D241E7652B22FF6200F5E27C /* Template.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Template.entitlements; sourceTree = "<group>"; };
 		D241E7672B22FF6200F5E27C /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
-
-/* Begin PBXFileSystemSynchronizedRootGroup section */
-		191740BD2E30EE3400CE35E0 /* sdfs Watch App */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = "sdfs Watch App"; sourceTree = "<group>"; };
-/* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		191740B62E30EE3400CE35E0 /* Frameworks */ = {
@@ -75,20 +70,36 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D241E76F2B22FFB500F5E27C /* macOS in Frameworks */,
-				D241E76D2B22FFB500F5E27C /* iOS in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		19970FCD2E370FCD0034F572 /* Assets */ = {
+			isa = PBXGroup;
+			children = (
+				D241E7632B22FF6200F5E27C /* Assets.xcassets */,
+				D241E7652B22FF6200F5E27C /* Template.entitlements */,
+				D241E7662B22FF6200F5E27C /* Preview Content */,
+				197AFF2C2E337FD8006F0FE3 /* Info.plist */,
+			);
+			path = Assets;
+			sourceTree = "<group>";
+		};
+		19970FD22E3711810034F572 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				194DD6922E33910E00D2AE2C /* AppDelegate.swift */,
+				194DD6942E33910E00D2AE2C /* SceneDelegate.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
 		1BA13A872B2214D30021880F = {
 			isa = PBXGroup;
 			children = (
-				1BA13ABE2B221D390021880F /* Packages */,
 				D241E75E2B22FF6100F5E27C /* Template */,
-				191740BD2E30EE3400CE35E0 /* sdfs Watch App */,
 				1BA13A912B2214D30021880F /* Products */,
 				1BA13AB42B221CBC0021880F /* Frameworks */,
 			);
@@ -111,29 +122,15 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		1BA13ABE2B221D390021880F /* Packages */ = {
-			isa = PBXGroup;
-			children = (
-				D241E7552B22EDE100F5E27C /* BaseKit */,
-				D241E7542B22EDE100F5E27C /* Common */,
-				D241E7562B22EDE100F5E27C /* CommonUI */,
-				D241E7532B22EDE100F5E27C /* Domain */,
-				1BA13AC12B221D390021880F /* iOS */,
-				1BA13ABF2B221D390021880F /* macOS */,
-				1B27F1132B22206C00F33B1F /* Third */,
-			);
-			path = Packages;
-			sourceTree = "<group>";
-		};
 		D241E75E2B22FF6100F5E27C /* Template */ = {
 			isa = PBXGroup;
 			children = (
-				197AFF2C2E337FD8006F0FE3 /* Info.plist */,
+				19970FD22E3711810034F572 /* App */,
+				19970FCD2E370FCD0034F572 /* Assets */,
+				19970FCE2E3710BF0034F572 /* Renderer.swift */,
+				194DD6912E33910E00D2AE2C /* ViewController.swift */,
+				19970FD02E37114C0034F572 /* Extensions.swift */,
 				1950D40B2E30AB1000B6B787 /* GaussianBlur.metal */,
-				D241E75F2B22FF6100F5E27C /* TemplateApp.swift */,
-				D241E7632B22FF6200F5E27C /* Assets.xcassets */,
-				D241E7652B22FF6200F5E27C /* Template.entitlements */,
-				D241E7662B22FF6200F5E27C /* Preview Content */,
 			);
 			path = Template;
 			sourceTree = "<group>";
@@ -180,9 +177,6 @@
 			);
 			dependencies = (
 			);
-			fileSystemSynchronizedGroups = (
-				191740BD2E30EE3400CE35E0 /* sdfs Watch App */,
-			);
 			name = "sdfs Watch App";
 			packageProductDependencies = (
 			);
@@ -204,8 +198,6 @@
 			);
 			name = Template;
 			packageProductDependencies = (
-				D241E76C2B22FFB500F5E27C /* iOS */,
-				D241E76E2B22FFB500F5E27C /* macOS */,
 			);
 			productName = Template;
 			productReference = D241E75D2B22FF6100F5E27C /* Template.app */;
@@ -292,7 +284,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D241E7602B22FF6100F5E27C /* TemplateApp.swift in Sources */,
+				194DD6952E33910E00D2AE2C /* SceneDelegate.swift in Sources */,
+				19970FD12E37114F0034F572 /* Extensions.swift in Sources */,
+				194DD6962E33910E00D2AE2C /* AppDelegate.swift in Sources */,
+				194DD6972E33910E00D2AE2C /* ViewController.swift in Sources */,
+				19970FCF2E3710C40034F572 /* Renderer.swift in Sources */,
 				1950D40C2E30AB1000B6B787 /* GaussianBlur.metal in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -521,15 +517,15 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = Template/Template.entitlements;
+				CODE_SIGN_ENTITLEMENTS = Template/Assets/Template.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"Template/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "\"Template/Assets/Preview Content\"";
 				DEVELOPMENT_TEAM = AU9N94TW42;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = Template/Info.plist;
+				INFOPLIST_FILE = Template/Assets/Info.plist;
 				INFOPLIST_KEY_NSCameraUsageDescription = asdadsa;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
@@ -541,7 +537,7 @@
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
@@ -549,7 +545,8 @@
 				PRODUCT_BUNDLE_IDENTIFIER = me.afuture.Template.metal;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -561,15 +558,15 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = Template/Template.entitlements;
+				CODE_SIGN_ENTITLEMENTS = Template/Assets/Template.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"Template/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "\"Template/Assets/Preview Content\"";
 				DEVELOPMENT_TEAM = AU9N94TW42;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = Template/Info.plist;
+				INFOPLIST_FILE = Template/Assets/Info.plist;
 				INFOPLIST_KEY_NSCameraUsageDescription = asdadsa;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
@@ -581,7 +578,7 @@
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
@@ -589,7 +586,8 @@
 				PRODUCT_BUNDLE_IDENTIFIER = me.afuture.Template.metal;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -636,17 +634,6 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
-
-/* Begin XCSwiftPackageProductDependency section */
-		D241E76C2B22FFB500F5E27C /* iOS */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = iOS;
-		};
-		D241E76E2B22FFB500F5E27C /* macOS */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = macOS;
-		};
-/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 1BA13A882B2214D30021880F /* Project object */;
 }
